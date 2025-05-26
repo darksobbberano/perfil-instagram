@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --highlight: #0095f6;
+            --border-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-family: 'Billabong', cursive;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-top {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .username {
+            font-weight: bold;
+        }
+
+        .bio {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .link {
+            color: var(--highlight);
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .edit-btn {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .stories {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin: 20px 0;
+        }
+
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            min-width: 70px;
+        }
+
+        .story-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .story-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .story-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-username {
+            font-size: 12px;
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+
+        .tab {
+            padding: 15px 0;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            border-top: 1px solid var(--text-color);
+        }
+
+        .tab i {
+            font-size: 24px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            margin-bottom: 50px;
+        }
+
+        .post {
+            aspect-ratio: 1/1;
+            background-color: var(--card-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .post-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .add-post {
+            font-size: 30px;
+            color: var(--text-secondary);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cancel-btn {
+            background-color: transparent;
+            color: var(--highlight);
+        }
+
+        .save-btn {
+            background-color: var(--highlight);
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .profile-pic {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .stats {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Instagram</div>
+        <div>
+            <i class="fas fa-plus" style="margin-right: 15px; font-size: 20px;"></i>
+            <i class="fas fa-bars" style="font-size: 20px;"></i>
+        </div>
+    </header>
+
+    <div class="profile-section">
+        <div class="profile-top">
+            <div>
+                <img id="profile-pic" src="https://via.placeholder.com/150" alt="Profile" class="profile-pic">
+                <input type="file" id="profile-upload" accept="image/*" class="hidden">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-value" id="posts-count">0</span>
+                    <span class="stat-label">Posts</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="followers-count">0</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="following-count">0</span>
+                    <span class="stat-label">Following</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-info">
+            <div class="username" id="username">username</div>
+            <div class="bio" id="bio">Bio goes here</div>
+            <a href="#" class="link" id="profile-link">example.com</a>
+            <button class="edit-btn" id="edit-profile">Edit Profile</button>
+        </div>
+    </div>
+
+    <div class="stories" id="stories-container">
+        <!-- Stories will be added here dynamically -->
+    </div>
+
+    <div class="tabs">
+        <div class="tab active"><i class="fas fa-table-cells-large"></i></div>
+        <div class="tab"><i class="fas fa-film"></i></div>
+        <div class="tab"><i class="fas fa-user-tag"></i></div>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Posts will be added here dynamically -->
+        <div class="post" id="add-post">
+            <div class="add-post">+</div>
+            <input type="file" id="post-upload" accept="image/*" class="hidden" multiple>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>@dark.soberano</span>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal hidden" id="edit-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Edit Profile</h3>
+            <div class="form-group">
+                <label for="edit-username">Username</label>
+                <input type="text" id="edit-username">
+            </div>
+            <div class="form-group">
+                <label for="edit-bio">Bio</label>
+                <textarea id="edit-bio" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-link">Link</label>
+                <input type="text" id="edit-link">
+            </div>
+            <div class="form-group">
+                <label>Stats</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="edit-posts" placeholder="Posts" style="flex: 1;">
+                    <input type="number" id="edit-followers" placeholder="Followers" style="flex: 1;">
+                    <input type="number" id="edit-following" placeholder="Following" style="flex: 1;">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancel-edit">Cancel</button>
+                <button class="modal-btn save-btn" id="save-edit">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Story Modal -->
+    <div class="modal hidden" id="story-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Edit Story</h3>
+            <div class="form-group">
+                <label for="story-username">Username</label>
+                <input type="text" id="story-username">
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" id="story-image" accept="image/*">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancel-story">Cancel</button>
+                <button class="modal-btn save-btn" id="save-story">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const profilePic = document.getElementById('profile-pic');
+        const profileUpload = document.getElementById('profile-upload');
+        const username = document.getElementById('username');
+        const bio = document.getElementById('bio');
+        const profileLink = document.getElementById('profile-link');
+        const postsCount = document.getElementById('posts-count');
+        const followersCount = document.getElementById('followers-count');
+        const followingCount = document.getElementById('following-count');
+        const editProfileBtn = document.getElementById('edit-profile');
+        const editModal = document.getElementById('edit-modal');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+        const saveEditBtn = document.getElementById('save-edit');
+        const editUsername = document.getElementById('edit-username');
+        const editBio = document.getElementById('edit-bio');
+        const editLink = document.getElementById('edit-link');
+        const editPosts = document.getElementById('edit-posts');
+        const editFollowers = document.getElementById('edit-followers');
+        const editFollowing = document.getElementById('edit-following');
+        const storiesContainer = document.getElementById('stories-container');
+        const gallery = document.getElementById('gallery');
+        const addPostBtn = document.getElementById('add-post');
+        const postUpload = document.getElementById('post-upload');
+        const storyModal = document.getElementById('story-modal');
+        const storyUsername = document.getElementById('story-username');
+        const storyImage = document.getElementById('story-image');
+        const cancelStoryBtn = document.getElementById('cancel-story');
+        const saveStoryBtn = document.getElementById('save-story');
+
+        // Current story being edited
+        let currentStoryIndex = -1;
+        const stories = [
+            { username: "story1", image: null },
+            { username: "story2", image: null },
+            { username: "story3", image: null },
+            { username: "story4", image: null },
+            { username: "story5", image: null }
+        ];
+
+        // Posts array
+        const posts = [];
+
+        // Initialize the page
+        function init() {
+            // Load profile data from localStorage if available
+            const savedProfile = localStorage.getItem('instagramProfile');
+            if (savedProfile) {
+                const profile = JSON.parse(savedProfile);
+                username.textContent = profile.username || 'username';
+                bio.textContent = profile.bio || 'Bio goes here';
+                profileLink.textContent = profile.link || 'example.com';
+                profileLink.href = profile.link || '#';
+                postsCount.textContent = profile.posts || '0';
+                followersCount.textContent = profile.followers || '0';
+                followingCount.textContent = profile.following || '0';
+                
+                if (profile.profilePic) {
+                    profilePic.src = profile.profilePic;
+                }
+            }
+
+            // Load stories from localStorage if available
+            const savedStories = localStorage.getItem('instagramStories');
+            if (savedStories) {
+                const parsedStories = JSON.parse(savedStories);
+                stories.forEach((story, index) => {
+                    if (parsedStories[index]) {
+                        story.username = parsedStories[index].username || story.username;
+                        story.image = parsedStories[index].image || story.image;
+                    }
+                });
+            }
+
+            // Load posts from localStorage if available
+            const savedPosts = localStorage.getItem('instagramPosts');
+            if (savedPosts) {
+                const parsedPosts = JSON.parse(savedPosts);
+                parsedPosts.forEach(post => {
+                    posts.push(post);
+                    addPostToGallery(post);
+                });
+            }
+
+            renderStories();
+            updatePostCount();
+        }
+
+        // Render stories
+        function renderStories() {
+            storiesContainer.innerHTML = '';
+            stories.forEach((story, index) => {
+                const storyElement = document.createElement('div');
+                storyElement.className = 'story';
+                storyElement.innerHTML = `
+                    <div class="story-circle">
+                        <div class="story-inner">
+                            ${story.image ? 
+                                `<img src="${story.image}" class="story-pic" alt="${story.username}">` : 
+                                `<i class="fas fa-user" style="font-size: 30px; color: #666;"></i>`}
+                        </div>
+                    </div>
+                    <div class="story-username">${story.username}</div>
+                `;
+                storyElement.addEventListener('click', () => editStory(index));
+                storiesContainer.appendChild(storyElement);
+            });
+        }
+
+        // Add post to gallery
+        function addPostToGallery(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            postElement.innerHTML = `
+                <img src="${post.image}" class="post-img" alt="Post">
+            `;
+            gallery.insertBefore(postElement, addPostBtn);
+        }
+
+        // Update post count
+        function updatePostCount() {
+            postsCount.textContent = posts.length;
+        }
+
+        // Event Listeners
+        profilePic.addEventListener('click', () => {
+            profileUpload.click();
+        });
+
+        profileUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profilePic.src = event.target.result;
+                    // Save to localStorage
+                    const profile = JSON.parse(localStorage.getItem('instagramProfile') || '{}');
+                    profile.profilePic = event.target.result;
+                    localStorage.setItem('instagramProfile', JSON.stringify(profile));
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        editProfileBtn.addEventListener('click', () => {
+            // Fill modal with current data
+            editUsername.value = username.textContent;
+            editBio.value = bio.textContent;
+            editLink.value = profileLink.textContent;
+            editPosts.value = postsCount.textContent;
+            editFollowers.value = followersCount.textContent;
+            editFollowing.value = followingCount.textContent;
+            
+            // Show modal
+            editModal.classList.remove('hidden');
+        });
+
+        cancelEditBtn.addEventListener('click', () => {
+            editModal.classList.add('hidden');
+        });
+
+        saveEditBtn.addEventListener('click', () => {
+            // Update profile data
+            username.textContent = editUsername.value;
+            bio.textContent = editBio.value;
+            profileLink.textContent = editLink.value;
+            profileLink.href = editLink.value.startsWith('http') ? editLink.value : `https://${editLink.value}`;
+            postsCount.textContent = editPosts.value;
+            followersCount.textContent = editFollowers.value;
+            followingCount.textContent = editFollowing.value;
+            
+            // Save to localStorage
+            const profile = {
+                username: editUsername.value,
+                bio: editBio.value,
+                link: editLink.value,
+                posts: editPosts.value,
+                followers: editFollowers.value,
+                following: editFollowing.value,
+                profilePic: profilePic.src
+            };
+            localStorage.setItem('instagramProfile', JSON.stringify(profile));
+            
+            // Hide modal
+            editModal.classList.add('hidden');
+        });
+
+        addPostBtn.addEventListener('click', () => {
+            postUpload.click();
+        });
+
+        postUpload.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const post = { image: event.target.result };
+                        posts.push(post);
+                        addPostToGallery(post);
+                        updatePostCount();
+                        
+                        // Save to localStorage
+                        localStorage.setItem('instagramPosts', JSON.stringify(posts));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        function editStory(index) {
+            currentStoryIndex = index;
+            const story = stories[index];
+            storyUsername.value = story.username;
+            
+            // Show modal
+            storyModal.classList.remove('hidden');
+        }
+
+        cancelStoryBtn.addEventListener('click', () => {
+            storyModal.classList.add('hidden');
+        });
+
+        saveStoryBtn.addEventListener('click', () => {
+            const story = stories[currentStoryIndex];
+            story.username = storyUsername.value;
+            
+            // Handle image upload if selected
+            const file = storyImage.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    story.image = event.target.result;
+                    saveStories();
+                    renderStories();
+                    storyModal.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                saveStories();
+                renderStories();
+                storyModal.classList.add('hidden');
+            }
+        });
+
+        function saveStories() {
+            localStorage.setItem('instagramStories', JSON.stringify(stories));
+        }
+
+        // Initialize the page
+        init();
+    </script>
+</body>
+</html>
