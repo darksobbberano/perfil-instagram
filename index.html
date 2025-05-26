@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Instagram - @dark.soberano</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .profile {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .profile-header {
+            display: flex;
+            gap: 20px;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .counters {
+            display: flex;
+            gap: 15px;
+        }
+        .counter {
+            text-align: center;
+        }
+        .bio {
+            margin: 15px 0;
+        }
+        .highlights {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .highlight {
+            width: 70px;
+            text-align: center;
+        }
+        .highlight img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+        .edit-panel {
+            background: #222;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile">
+        <div class="profile-header">
+            <img id="profile-pic" src="https://via.placeholder.com/100" class="profile-pic" onclick="document.getElementById('upload-pic').click()">
+            <input type="file" id="upload-pic" accept="image/*" class="hidden">
+            <div>
+                <h1 id="username">dark.soberano</h1>
+                <div class="counters">
+                    <div class="counter"><strong id="posts">0</strong> posts</div>
+                    <div class="counter"><strong id="followers">0</strong> seguidores</div>
+                    <div class="counter"><strong id="following">0</strong> seguindo</div>
+                </div>
+                <button onclick="toggleEditPanel()">Editar Perfil</button>
+            </div>
+        </div>
+        <div class="bio" id="bio">Olá! Edite sua bio aqui.</div>
+        <a href="#" id="bio-link" target="_blank">bio.link/exemplo</a>
+        
+        <div class="highlights" id="highlights">
+            <!-- Destaques serão adicionados via JS -->
+        </div>
+        
+        <div class="gallery" id="gallery">
+            <!-- Posts serão adicionados via JS -->
+        </div>
+        
+        <div class="edit-panel hidden" id="edit-panel">
+            <h3>Editar Perfil</h3>
+            <input type="text" id="edit-username" placeholder="Nome de usuário">
+            <textarea id="edit-bio" placeholder="Bio"></textarea>
+            <input type="text" id="edit-link" placeholder="Link">
+            <button onclick="saveChanges()">Salvar</button>
+        </div>
+    </div>
+    
+    <footer>
+        <a href="#" onclick="window.location.href='https://instagram.com/dark.soberano'" style="color: gray; font-size: 0.8em;">⚙️</a>
+    </footer>
+
+    <script>
+        function toggleEditPanel() {
+            document.getElementById('edit-panel').classList.toggle('hidden');
+        }
+        
+        function saveChanges() {
+            document.getElementById('username').textContent = document.getElementById('edit-username').value;
+            document.getElementById('bio').textContent = document.getElementById('edit-bio').value;
+            document.getElementById('bio-link').href = document.getElementById('edit-link').value;
+            toggleEditPanel();
+        }
+        
+        // Upload de imagem de perfil
+        document.getElementById('upload-pic').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('profile-pic').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
